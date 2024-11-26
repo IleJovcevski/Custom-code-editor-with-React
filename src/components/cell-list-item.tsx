@@ -1,5 +1,16 @@
-const CellListItem: React.FC = () => {
-  return <div>Cell Item</div>;
+import { Cell } from "../state";
+import CodeCell from "./code-cell";
+import TextEditor from "./text-editor";
+
+interface CellListItemProps {
+  cell: Cell;
+}
+
+const CellListItem: React.FC<CellListItemProps> = ({ cell }) => {
+  let child: JSX.Element;
+
+  cell.type === "code" ? (child = <CodeCell />) : (child = <TextEditor />);
+  return <div>{child}</div>;
 };
 
 export default CellListItem;
