@@ -3,6 +3,7 @@ import { Cell } from "../state";
 import CodeCell from "./code-cell";
 import TextEditor from "./text-editor";
 import ActionBar from "./action-bar";
+import { CellType } from "../enums";
 
 interface CellListItemProps {
   cell: Cell;
@@ -11,7 +12,7 @@ interface CellListItemProps {
 const CellListItem: React.FC<CellListItemProps> = ({ cell }) => {
   let child: JSX.Element;
 
-  cell.type === "code"
+  cell.type === CellType.CODE
     ? (child = (
         <>
           <div className="action-bar-wrapper">
