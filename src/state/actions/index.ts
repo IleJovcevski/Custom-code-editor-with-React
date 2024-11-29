@@ -32,7 +32,7 @@ export interface UpdateCellAction {
   };
 }
 
-export interface BundeStartAction {
+export interface BundleStartAction {
   type: ActionType.BUNDLE_START;
   payload: {
     cellId: string;
@@ -55,5 +55,5 @@ export type Action =
   | DeleteCellAction
   | InsertCellAfterAction
   | UpdateCellAction
-  | BundeStartAction
+  | BundleStartAction
   | BundleCompleteAction;
