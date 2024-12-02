@@ -1,3 +1,4 @@
+import "./code-cell.css";
 import { useEffect } from "react";
 import CodeEditor from "./code-editor";
 import Preview from "./code-preview";
@@ -14,9 +15,13 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   //user will not be able to use local storage or cookies with this app
   const { updateCell, createBundle } = useActions();
   const bundle = useTypedSelector((state) => state.bundles[cell.id]);
-  console.log("bundle: ", bundle);
+  //console.log("bundle: ", bundle);
 
   useEffect(() => {
+    if (!bundle) {
+      createBundle(cell.id, cell.content);
+      return;
+    }
     //setting up debouncer for bundler
     const timer = setTimeout(async () => {
       createBundle(cell.id, cell.content);
@@ -26,6 +31,7 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
     return () => {
       clearTimeout(timer);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cell.content, cell.id, createBundle]);
 
   return (
@@ -44,9 +50,17 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
           />
         </Resizable>
 
-        {bundle && (
-          <Preview bundledCode={bundle.code} bundleError={bundle.err} />
-        )}
+        <div className="progress-wrapper">
+          {!bundle || bundle.loading ? (
+            <div className="progress-cover">
+              <progress className="progress is-small is-primary" max="100">
+                Loading
+              </progress>
+            </div>
+          ) : (
+            <Preview bundledCode={bundle.code} bundleError={bundle.err} />
+          )}
+        </div>
       </div>
     </Resizable>
   );
