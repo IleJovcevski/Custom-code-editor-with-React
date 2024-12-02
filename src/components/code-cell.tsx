@@ -6,6 +6,7 @@ import Resizable from "./resizable";
 import { Cell } from "../state";
 import { useActions } from "../hooks/use-actions";
 import { useTypedSelector } from "../hooks/use-typed-selector";
+import { CellType } from "../enums";
 
 interface CodeCellProps {
   cell: Cell;
@@ -16,6 +17,23 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   const { updateCell, createBundle } = useActions();
   const bundle = useTypedSelector((state) => state.bundles[cell.id]);
   //console.log("bundle: ", bundle);
+  const cumulativeCode = useTypedSelector((state) => {
+    const { data, order } = state.cells;
+    const orderedCells = order.map((id) => data[id]);
+
+    const cumulativeCode = [];
+    for (let c of orderedCells) {
+      if (c.type === CellType.CODE) {
+        cumulativeCode.push(c.content);
+      }
+      if (c.id === cell.id) {
+        break;
+      }
+    }
+    return cumulativeCode;
+  });
+
+  console.log("cumulative code: ", cumulativeCode);
 
   useEffect(() => {
     if (!bundle) {
@@ -25,7 +43,7 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
     //setting up debouncer for bundler
     const timer = setTimeout(async () => {
       createBundle(cell.id, cell.content);
-    }, 1000);
+    }, 750);
 
     //cleanup Fn for the timer
     return () => {
