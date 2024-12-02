@@ -1,34 +1,32 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import CodeEditor from "./code-editor";
 import Preview from "./code-preview";
-import bundle from "../bundler";
 import Resizable from "./resizable";
 import { Cell } from "../state";
 import { useActions } from "../hooks/use-actions";
+import { useTypedSelector } from "../hooks/use-typed-selector";
 
 interface CodeCellProps {
   cell: Cell;
 }
 
 const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
-  const [code, setCode] = useState("");
   //user will not be able to use local storage or cookies with this app
-  const [error, setError] = useState("");
-  const { updateCell } = useActions();
+  const { updateCell, createBundle } = useActions();
+  const bundle = useTypedSelector((state) => state.bundles[cell.id]);
+  console.log("bundle: ", bundle);
 
   useEffect(() => {
     //setting up debouncer for bundler
     const timer = setTimeout(async () => {
-      const output = await bundle(cell.content);
-      setCode(output.code);
-      setError(output.err);
+      createBundle(cell.id, cell.content);
     }, 1000);
 
     //cleanup Fn for the timer
     return () => {
       clearTimeout(timer);
     };
-  }, [cell.content]);
+  }, [cell.content, cell.id, createBundle]);
 
   return (
     <Resizable direction="vertical">
@@ -46,7 +44,9 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
           />
         </Resizable>
 
-        <Preview bundledCode={code} bundleError={error} />
+        {bundle && (
+          <Preview bundledCode={bundle.code} bundleError={bundle.err} />
+        )}
       </div>
     </Resizable>
   );
