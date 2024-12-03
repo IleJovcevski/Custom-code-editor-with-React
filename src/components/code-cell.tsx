@@ -33,16 +33,16 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
     return cumulativeCode;
   });
 
-  console.log("cumulative code: ", cumulativeCode);
+  //console.log("cumulative code: ", cumulativeCode);
 
   useEffect(() => {
     if (!bundle) {
-      createBundle(cell.id, cell.content);
+      createBundle(cell.id, cumulativeCode.join("\n"));
       return;
     }
     //setting up debouncer for bundler
     const timer = setTimeout(async () => {
-      createBundle(cell.id, cell.content);
+      createBundle(cell.id, cumulativeCode.join("\n"));
     }, 750);
 
     //cleanup Fn for the timer
@@ -50,7 +50,7 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
       clearTimeout(timer);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cell.content, cell.id, createBundle]);
+  }, [cumulativeCode.join("\n"), cell.id, createBundle]);
 
   return (
     <Resizable direction="vertical">
