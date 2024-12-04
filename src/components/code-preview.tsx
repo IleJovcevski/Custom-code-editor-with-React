@@ -1,3 +1,4 @@
+import { store } from "../state";
 import "./preview.css";
 import { useEffect, useRef } from "react";
 
@@ -45,6 +46,7 @@ const Preview: React.FC<PreviewProps> = ({ bundledCode, bundleError }) => {
     iframeRef.current.srcdoc = html;
     setTimeout(() => {
       iframeRef.current.contentWindow.postMessage(bundledCode, "*");
+      console.log("changed state", store.getState());
     }, 50);
   }, [bundledCode]);
 
