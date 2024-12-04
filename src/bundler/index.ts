@@ -23,6 +23,9 @@ const bundle = async (rawCode: string) => {
         "process.env.NODE_ENV": "'production'",
         global: "window",
       },
+      //modifying esbuild
+      jsxFactory: "_React.createElement",
+      jsxFragment: "_React.Fragment",
     });
 
     return { code: result.outputFiles[0].text, err: "" };

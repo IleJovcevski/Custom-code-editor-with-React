@@ -1,0 +1,7 @@
+.cell-list {
+  margin: 0 25px 50vh;
+}
+/* resolving snappy resize on bottom element */
+.react-draggable-transparent-selection .cell-list {
+  margin-bottom: 100vh;
+}

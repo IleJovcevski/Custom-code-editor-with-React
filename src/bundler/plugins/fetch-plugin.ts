@@ -22,7 +22,7 @@ export const fetchPlugin = (inputCode: string) => {
 
         //if it is return it
         if (cachedResult) {
-          console.log("found cached result: ", cachedResult);
+          //console.log("found cached result: ", cachedResult);
           return cachedResult;
         }
       });

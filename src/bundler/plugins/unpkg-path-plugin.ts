@@ -25,7 +25,7 @@ export const unpkgPathPlugin = () => {
 
       //handle main file of a module
       build.onResolve({ filter: /.*/ }, async (args: any) => {
-        console.log("onResolve", args);
+        //console.log("onResolve", args);
 
         return {
           path: `https://unpkg.com/${args.path}`,
